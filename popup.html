@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gemini Page Translator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      width: 300px;
+      padding: 10px;
+    }
+    h1 {
+      font-size: 1.2em;
+    }
+    #controls, #apiKeySection {
+        margin-top: 10px;
+    }
+    input[type="password"], input[type="text"] {
+        width: 90%;
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+    button {
+        width: 100%;
+        padding: 8px;
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 5px;
+    }
+    button:hover {
+        background-color: #357ae8;
+    }
+    #status {
+        margin-top: 10px;
+        font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gemini Page Translator</h1>
+
+  <div id="settingsSection">
+    <label for="apiKey">Gemini API Key:</label>
+    <input type="password" id="apiKey" placeholder="Enter your API Key">
+
+    <label for="modelName">Gemini Model:</label>
+    <input type="text" id="modelName" placeholder="e.g., gemini-pro">
+
+    <button id="saveSettings">Save Settings</button>
+  </div>
+
+  <div id="controls">
+    <label for="targetLanguage">Translate to:</label>
+    <select id="targetLanguage">
+      <option value="Chinese">Chinese (中文)</option>
+      <option value="Japanese">Japanese (日本語)</option>
+      <option value="English">English</option>
+      <option value="Korean">Korean (한국어)</option>
+      <option value="Spanish">Spanish (Español)</option>
+      <option value="French">French (Français)</option>
+    </select>
+    <button id="translateBtn">Translate Page</button>
+  </div>
+
+  <div id="tokenSection">
+    <p>Total tokens used: <span id="tokenCount">0</span></p>
+    <button id="resetTokensBtn">Reset Count</button>
+  </div>
+
+  <div id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 
