@@ -97,15 +97,12 @@ function triggerTranslation(tab) {
     if (tab && tab.id) {
         // Get the last used language from storage, default to Chinese
         chrome.storage.sync.get('targetLanguage', (data) => {
-            const targetLanguage = data.targetLanguage || 'Chinese'; 
+            const targetLanguage = data.targetLanguage || 'zh'; 
             
-            // Execute a script in the tab to send a message to our content script
-            chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                func: (lang) => {
-                    window.postMessage({ type: 'TRANSLATE_PAGE', lang: lang }, '*');
-                },
-                args: [targetLanguage]
+            // Send a message directly to the content script in the specified tab
+            chrome.tabs.sendMessage(tab.id, {
+                type: 'TRANSLATE_PAGE',
+                lang: targetLanguage
             });
         });
     }

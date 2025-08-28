@@ -1,11 +1,11 @@
 // Keep track of elements that have been translated
 const translatedMark = 'gemini-translated-block';
 
-// Listen for the message from the popup
-window.addEventListener('message', function(event) {
-    if (event.source === window && event.data.type === 'TRANSLATE_PAGE') {
-        console.log("Translation started for language:", event.data.lang);
-        const targetLanguage = event.data.lang;
+// Listen for the message from the background script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'TRANSLATE_PAGE') {
+        console.log("Translation started for language:", request.lang);
+        const targetLanguage = request.lang;
         
         // Inject CSS for styling the translated text
         injectStyles();
@@ -29,6 +29,7 @@ window.addEventListener('message', function(event) {
                 }
             });
         }
+        return true; // Keep the message channel open for the async response
     }
 });
 
@@ -41,9 +42,9 @@ function injectStyles() {
         .gemini-translated-text {
             display: block;
             margin-bottom: 1em; /* Restore the original paragraph margin */
-            padding: 0.2em 0.5em;
-            background-color: #f8f9fa;
-            color: #5f6368;
+            padding: 0.2em 0em; /* Adjust padding for a cleaner look without background */
+            /* Removed fixed background and color to inherit from the site's theme */
+            opacity: 0.8; /* De-emphasize translation slightly to distinguish from original */
             font-size: 1em; /* Match original font size */
             font-style: normal; /* Not italic */
         }
@@ -64,18 +65,33 @@ function injectStyles() {
 
 function findContentBlocks(node) {
     const blocks = [];
-    // More semantic block-level elements
-    const selectors = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, dd, dt, td';
+    // Expanded selectors to include divs and spans which are often used for content.
+    const selectors = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, dd, dt, td, div, span';
     const elements = node.querySelectorAll(selectors);
 
     elements.forEach(el => {
-        // Check if element is visible and has meaningful text content
-        // and hasn't been translated yet.
+        // Element should not be part of an existing translation block
+        if (el.closest('.gemini-translated-text') || el.closest('.gemini-translation-wrapper')) {
+            return;
+        }
+
+        // Check if element is visible, has meaningful text content, and hasn't been translated.
         if (el.offsetParent !== null && 
-            el.innerText.trim().length > 15 && // Avoid translating tiny snippets
+            el.innerText.trim().length > 15 && 
             !el.classList.contains(translatedMark) &&
-            el.closest(`.${translatedMark}`) === null && // Also check parents
-            el.closest('a, button') === null) { // Avoid elements inside links/buttons
+            el.closest(`.${translatedMark}`) === null &&
+            el.closest('a, button, nav, header, footer, style, script') === null) { // Avoid elements inside navigation/interactive elements
+
+                // Stricter rule for generic divs and spans:
+                // Only translate them if they don't contain other block-level elements.
+                // This prevents us from translating huge container divs.
+                if (el.tagName === 'DIV' || el.tagName === 'SPAN') {
+                    // Check if it has any block-level children or other known content blocks
+                    if (el.querySelector(selectors) !== null) {
+                        return; // Skip this one, as it contains other blocks we'll process separately
+                    }
+                }
+                
                 blocks.push(el);
                 el.classList.add(translatedMark); // Mark as processed
         }
@@ -95,15 +111,24 @@ function displayTranslations(blocks, translatedTexts) {
     const count = Math.min(blocks.length, translatedTexts.length);
     for (let i = 0; i < count; i++) {
         const originalBlock = blocks[i];
-        const translatedText = translatedTexts[i];
+        const translatedText = translatedTexts[i].trim();
 
-        if (translatedText.trim()) {
+        if (translatedText) {
+            // To prevent re-translation, wrap original and translation in a container.
+            // This is more robust against DOM changes by frameworks.
+            const wrapper = document.createElement('div');
+            wrapper.className = 'gemini-translation-wrapper';
+
             const translationElement = document.createElement('div');
             translationElement.className = 'gemini-translated-text';
             translationElement.innerText = translatedText;
             
-            // Insert the translation right after the original block
-            originalBlock.parentNode.insertBefore(translationElement, originalBlock.nextSibling);
+            // Replace original block with the wrapper containing both
+            if (originalBlock.parentNode) {
+                originalBlock.parentNode.insertBefore(wrapper, originalBlock);
+            }
+            wrapper.appendChild(originalBlock);
+            wrapper.appendChild(translationElement);
         }
     }
 }

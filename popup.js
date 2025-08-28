@@ -92,3 +92,4 @@ function startTranslation(targetLanguage) {
     // It sends a message that the content script will listen for.
     window.postMessage({ type: 'TRANSLATE_PAGE', lang: targetLanguage }, '*');
 } 
+
