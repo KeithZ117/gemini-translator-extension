@@ -6,10 +6,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'TRANSLATE_PAGE') {
         console.log("Translation started for language:", request.lang);
         const targetLanguage = request.lang;
-        
+
         // Inject CSS for styling the translated text
         injectStyles();
-        
+
         // Find content blocks to translate
         const contentBlocks = findContentBlocks(document.body);
         const textsToTranslate = contentBlocks.map(block => block.innerText);
@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 }
             });
         }
-        return true; // Keep the message channel open for the async response
+        sendResponse({ acknowledged: true });
     }
 });
 
