@@ -280,7 +280,7 @@ function isElementEligibleForTranslation(element) {
         return false;
     }
 
-    if (element.closest('a, button, nav, header, footer')) {
+    if (element.closest('button, nav, header, footer')) {
         return false;
     }
 
@@ -352,6 +352,32 @@ function isAlreadyTranslated(element, language, signature) {
     return storedSignature === signature;
 }
 
+function calculateGrayerColor(colorString) {
+    // Assuming colorString is in the format "rgb(r, g, b)"
+    const parts = colorString.substring(colorString.indexOf('(') + 1, colorString.lastIndexOf(')')).split(',');
+    if (parts.length < 3) {
+        return colorString;
+    }
+    let [r, g, b] = parts.map(part => parseInt(part.trim(), 10));
+
+    // Simple check for darkness/lightness
+    const isDark = (r + g + b) < 382; // 255 * 3 / 2 = 382.5
+
+    if (isDark) {
+        // It's a dark color, make it lighter
+        r = Math.min(255, r + 80);
+        g = Math.min(255, g + 80);
+        b = Math.min(255, b + 80);
+    } else {
+        // It's a light color, make it darker
+        r = Math.max(0, r - 80);
+        g = Math.max(0, g - 80);
+        b = Math.max(0, b - 80);
+    }
+
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
 async function translateTargets(rawTargets, language) {
     if (!rawTargets.length) {
         return;
@@ -393,6 +419,10 @@ function prepareTranslationTargets(rawTargets, language) {
         const placeholder = ensureTranslationPlaceholder(element);
         setPlaceholderLoading(placeholder);
 
+        const originalColor = window.getComputedStyle(element).color;
+        const newColor = calculateGrayerColor(originalColor);
+        placeholder.style.color = newColor;
+
         return {
             element,
             text: target.text,
@@ -410,6 +440,17 @@ function ensureTranslationPlaceholder(originalBlock) {
             placeholder = document.createElement('div');
             placeholder.className = TRANSLATED_TEXT_CLASS;
             existingWrapper.appendChild(placeholder);
+        }
+        return placeholder;
+    }
+
+    if (originalBlock.tagName === 'LI') {
+        originalBlock.classList.add(TRANSLATION_WRAPPER_CLASS);
+        let placeholder = originalBlock.querySelector(`.${TRANSLATED_TEXT_CLASS}`);
+        if (!placeholder) {
+            placeholder = document.createElement('div');
+            placeholder.className = TRANSLATED_TEXT_CLASS;
+            originalBlock.appendChild(placeholder);
         }
         return placeholder;
     }
