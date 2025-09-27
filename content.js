@@ -15,6 +15,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const textsToTranslate = contentBlocks.map(block => block.innerText);
 
         if (textsToTranslate.length > 0) {
+            const placeholderElements = contentBlocks.map(block => createTranslationPlaceholder(block));
             // Send to background script for translation
             chrome.runtime.sendMessage({
                 type: 'translate',
@@ -24,8 +25,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 if (response.error) {
                     console.error('Translation error:', response.error);
                     alert('Translation failed: ' + response.error);
+                    displayTranslationError(placeholderElements, response.error);
                 } else if (response.translatedTexts) {
-                    displayTranslations(contentBlocks, response.translatedTexts);
+                    displayTranslations(placeholderElements, response.translatedTexts);
                 }
             });
         }
@@ -47,6 +49,39 @@ function injectStyles() {
             opacity: 0.8; /* De-emphasize translation slightly to distinguish from original */
             font-size: 1em; /* Match original font size */
             font-style: normal; /* Not italic */
+        }
+        .gemini-translation-wrapper {
+            position: relative;
+        }
+        .gemini-translating {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            color: inherit;
+            opacity: 0.6;
+        }
+        .gemini-translating-label {
+            font-style: italic;
+        }
+        .gemini-spinner {
+            width: 0.9em;
+            height: 0.9em;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: gemini-spin 0.8s linear infinite;
+        }
+        .gemini-translation-error {
+            color: #d93025;
+            opacity: 1;
+        }
+        @keyframes gemini-spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
     `;
 
@@ -99,38 +134,67 @@ function findContentBlocks(node) {
     return blocks;
 }
 
-function displayTranslations(blocks, translatedTexts) {
-    // We assume the API returns translations in the same order
-    if (blocks.length !== translatedTexts.length) {
-        console.warn("Mismatch between content blocks and translations count.", {
-            blocks: blocks.length,
+function createTranslationPlaceholder(originalBlock) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'gemini-translation-wrapper';
+
+    const translationElement = document.createElement('div');
+    translationElement.className = 'gemini-translated-text gemini-translating';
+
+    const spinner = document.createElement('span');
+    spinner.className = 'gemini-spinner';
+    translationElement.appendChild(spinner);
+
+    const label = document.createElement('span');
+    label.className = 'gemini-translating-label';
+    label.textContent = 'Translating…';
+    translationElement.appendChild(label);
+
+    if (originalBlock.parentNode) {
+        originalBlock.parentNode.insertBefore(wrapper, originalBlock);
+    }
+    wrapper.appendChild(originalBlock);
+    wrapper.appendChild(translationElement);
+
+    return translationElement;
+}
+
+function displayTranslations(placeholders, translatedTexts) {
+    if (placeholders.length !== translatedTexts.length) {
+        console.warn("Mismatch between placeholders and translations count.", {
+            placeholders: placeholders.length,
             translations: translatedTexts.length
         });
     }
 
-    const count = Math.min(blocks.length, translatedTexts.length);
+    const count = Math.min(placeholders.length, translatedTexts.length);
     for (let i = 0; i < count; i++) {
-        const originalBlock = blocks[i];
+        const placeholder = placeholders[i];
         const translatedText = translatedTexts[i].trim();
 
-        if (translatedText) {
-            // To prevent re-translation, wrap original and translation in a container.
-            // This is more robust against DOM changes by frameworks.
-            const wrapper = document.createElement('div');
-            wrapper.className = 'gemini-translation-wrapper';
+        placeholder.classList.remove('gemini-translating');
+        placeholder.classList.remove('gemini-translation-error');
 
-            const translationElement = document.createElement('div');
-            translationElement.className = 'gemini-translated-text';
-            translationElement.innerText = translatedText;
-            
-            // Replace original block with the wrapper containing both
-            if (originalBlock.parentNode) {
-                originalBlock.parentNode.insertBefore(wrapper, originalBlock);
-            }
-            wrapper.appendChild(originalBlock);
-            wrapper.appendChild(translationElement);
+        if (translatedText) {
+            placeholder.textContent = translatedText;
+        } else {
+            placeholder.textContent = '';
         }
     }
+
+    for (let i = count; i < placeholders.length; i++) {
+        const placeholder = placeholders[i];
+        placeholder.classList.remove('gemini-translating');
+        placeholder.textContent = '';
+    }
+}
+
+function displayTranslationError(placeholders, errorMessage) {
+    placeholders.forEach(placeholder => {
+        placeholder.classList.remove('gemini-translating');
+        placeholder.classList.add('gemini-translation-error');
+        placeholder.textContent = `Translation failed: ${errorMessage}`;
+    });
 }
 
 // The old listener can be removed or kept for other potential features.
