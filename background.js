@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         chrome.storage.sync.get(['geminiApiKey', 'geminiModelName'], async (result) => {
             const apiKey = result.geminiApiKey;
-            const modelName = result.geminiModelName || 'gemini-pro'; // Use saved model or fallback
+            const modelName = result.geminiModelName || 'gemini-2.5-flash-lite'; // Use saved model or fallback
             if (!apiKey) {
                 sendResponse({ error: 'API key is not set.' });
                 return;

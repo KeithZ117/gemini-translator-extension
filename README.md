@@ -6,7 +6,7 @@ This is a powerful Chrome extension that translates web page content using the G
 
 -   **Multi-Language Translation**: Translate pages into various languages, including Chinese, Japanese, English, and more.
 -   **Bilingual Display**: Instead of replacing text, the extension displays the translation directly below the original paragraph, creating an easy-to-follow, side-by-side reading experience.
--   **Custom Gemini Model**: Flexibility to use different Gemini models (e.g., `gemini-pro`, `gemini-1.5-flash-latest`) by specifying the model name in the settings.
+-   **Custom Gemini Model**: Flexibility to use different Gemini models (e.g., `gemini-2.5-flash-lite`, `gemini-1.5-flash-latest`) by specifying the model name in the settings.
 -   **Token Usage Tracking**: Keep track of your API usage with a built-in token counter, which can be reset at any time.
 -   **Quick Access**:
     -   **Context Menu**: Simply right-click on any page and select "Translate Page with Gemini" to start.
@@ -43,7 +43,7 @@ This is a powerful Chrome extension that translates web page content using the G
 1.  **Initial Setup**:
     -   Click on the extension's icon in the Chrome toolbar to open the popup.
     -   Enter your Gemini API key.
-    -   (Optional) Enter a specific Gemini Model name. If left blank, it defaults to `gemini-pro`.
+    -   (Optional) Enter a specific Gemini Model name. If left blank, it defaults to `gemini-2.5-flash-lite`.
     -   Click "Save Settings".
 
 2.  **Translating a Page**:

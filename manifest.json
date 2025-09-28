@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Gemini Page Translator",
+  "default_locale": "en",
+  "name": "__MSG_extension_name__",
   "version": "1.0",
-  "description": "Translate the current page using the Gemini API.",
+  "description": "__MSG_extension_description__",
   "permissions": [
     "storage",
     "activeTab",
@@ -10,6 +11,7 @@
     "contextMenus"
   ],
   "action": {
+    "default_title": "__MSG_extension_name__",
     "default_popup": "popup.html",
     "default_icon": {
       "128": "icons/icon128.png"
@@ -36,7 +38,7 @@
       "suggested_key": {
         "default": "Alt+X"
       },
-      "description": "Translate the current page"
+      "description": "__MSG_command_translate_description__"
     }
   }
-} 
+}
