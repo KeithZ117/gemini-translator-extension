@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (typeof substitutions === 'string') {
-      return ${key} ;
+      return (key + ' ' + substitutions).trim();
     }
 
     return key;
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     statusDiv.textContent = text;
-    statusDiv.className = status show ;
+    statusDiv.className = 'status show ' + type;
     if (duration > 0) {
       statusTimeoutId = setTimeout(() => {
         statusDiv.className = 'status';

@@ -1,142 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Gemini Page Translator</title>
   <style>
     :root {
-      color-scheme: light dark;
-      --surface: #f6f8fb;
-      --surface-variant: rgba(231, 236, 255, 0.92);
-      --surface-elevated: rgba(255, 255, 255, 0.82);
-      --on-surface: #0f172a;
-      --on-surface-variant: #334155;
-      --outline: rgba(203, 213, 245, 0.8);
-      --primary: #4f46ef;
-      --primary-container: rgba(222, 222, 254, 0.88);
-      --on-primary: #ffffff;
-      --shadow: rgba(79, 70, 239, 0.18);
-      --danger: #b91c1c;
-      --danger-container: rgba(248, 113, 113, 0.16);
-      --success: #15803d;
-      --success-container: rgba(74, 222, 128, 0.16);
+      color-scheme: dark light;
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-hover: #141414;
+      --border: #262626;
+      --border-hover: #404040;
+      --text: #f5f5f5;
+      --text-dim: #a3a3a3;
+      --primary: #22c55e;
+      --primary-hover: #16a34a;
+      --danger: #ef4444;
+      --danger-container: rgba(239, 68, 68, 0.1);
+      --success: #10b981;
+      --success-container: rgba(16, 185, 129, 0.1);
+      --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    
-    *, *::before, *::after { box-sizing: border-box; }
-
-@media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: light) {
       :root {
-        --surface: #0f172a;
-        --surface-variant: rgba(17, 25, 43, 0.88);
-        --surface-elevated: rgba(25, 37, 66, 0.86);
-        --on-surface: #e2e8f0;
-        --on-surface-variant: #cbd5f5;
-        --outline: rgba(100, 116, 139, 0.5);
-        --primary: #a5b4fc;
-        --primary-container: rgba(60, 73, 121, 0.82);
-        --on-primary: #111827;
-        --shadow: rgba(0, 0, 0, 0.55);
-        --danger-container: rgba(248, 113, 113, 0.24);
-        --success-container: rgba(74, 222, 128, 0.24);
+        --bg: #ffffff;
+        --surface: #ffffff;
+        --surface-hover: #f4f4f5;
+        --border: #e4e4e7;
+        --border-hover: #d4d4d8;
+        --text: #18181b;
+        --text-dim: #52525b;
       }
-    
-    *, *::before, *::after { box-sizing: border-box; }
+    }
 
-}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-    html, body {`n      height: 100%;`n      overflow: auto;`n    }
+    html,
+    body {
+      height: auto;
+      margin: 0;
+    }
 
     body {
-      margin: 0;
-      padding: 12px;
       width: 320px;
-      min-height: 100%;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      background: radial-gradient(125% 110% at 0% 0%, rgba(255, 255, 255, 0.95) 0%, rgba(226, 232, 255, 0.92) 58%, rgba(211, 221, 255, 0.95) 100%);
-      color: var(--on-surface);
-      font-family: "Segoe UI", "Roboto", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-family);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: radial-gradient(145% 140% at 10% 0%, rgba(32, 43, 74, 0.9) 0%, rgba(14, 20, 40, 0.96) 58%, rgba(10, 15, 32, 0.98) 100%);
-      }
-    }
-    @media (prefers-color-scheme: dark) {
-      body {
-      margin: 0;
-      padding: 12px;
-      width: 320px;
-      min-height: 100%;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      background: radial-gradient(125% 110% at 0% 0%, rgba(255, 255, 255, 0.95) 0%, rgba(226, 232, 255, 0.92) 58%, rgba(211, 221, 255, 0.95) 100%);
-      color: var(--on-surface);
-      font-family: "Segoe UI", "Roboto", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: radial-gradient(145% 140% at 10% 0%, rgba(32, 43, 74, 0.9) 0%, rgba(14, 20, 40, 0.96) 58%, rgba(10, 15, 32, 0.98) 100%);
-      }
-    }
     .card {
-      flex: 1 1 auto;\n      width: 100%;\n      min-height: 0;
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 20px;
-      padding: 20px 18px 18px;
-      border-radius: 0;`n      margin-top: 4px;
-      background: linear-gradient(170deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.58) 65%, rgba(255, 255, 255, 0.5) 100%), var(--surface-variant);
-      box-shadow: 0 24px 46px var(--shadow);
-      box-sizing: border-box;
-      
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .card {
-        background: linear-gradient(175deg, rgba(47, 63, 105, 0.82) 0%, rgba(17, 25, 45, 0.9) 45%, rgba(12, 19, 36, 0.94) 100%);
-        box-shadow: 0 24px 48px rgba(1, 3, 8, 0.65);
-      }
-    }
-
-    @supports (backdrop-filter: blur(18px)) {
-      .card {
-        backdrop-filter: blur(18px);
-        background: var(--surface-variant);
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .card {
-          background: var(--surface-variant);
-        }
-      }
+      padding: 24px;
+      background: var(--bg);
+      border-radius: 0;
+      border: none;
     }
 
     .header {
       display: flex;
       align-items: center;
       gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
     }
 
     .header-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: var(--primary-container);
-      color: var(--primary);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: rgba(34, 197, 94, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 1px solid rgba(34, 197, 94, 0.2);
     }
 
     .header-icon svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
     }
 
     .header-title {
@@ -147,63 +100,68 @@
 
     .header-title h1 {
       margin: 0;
-      font-size: 1.05rem;
-      letter-spacing: -0.01em;
+      font-size: 0.95rem;
       font-weight: 600;
-    `n      line-height: 1.28;`n    }
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
 
     .header-title p {
       margin: 0;
-      color: var(--on-surface-variant);
-      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-size: 0.75rem;
     }
 
     nav.tab-bar {
       display: flex;
-      gap: 6px;
-      background: rgba(79, 70, 239, 0.1);
-      border-radius: 999px;
+      gap: 4px;
+      background: var(--surface-hover);
+      border-radius: 6px;
       padding: 4px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      nav.tab-bar {
-        background: rgba(165, 180, 252, 0.12);
-      }
+      border: 1px solid var(--border);
     }
 
     .tab-button {
-      flex: 1 1 auto;\n      width: 100%;\n      min-height: 0;
+      flex: 1;
+      min-height: 0;
       border: 0;
       background: transparent;
-      color: var(--on-surface-variant);
-      font-weight: 600;
-      padding: 9px 0;
-      border-radius: 999px;
+      color: var(--text-dim);
+      font-weight: 500;
+      padding: 6px 0;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 0.86rem;
-      transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+      font-size: 0.75rem;
+      transition: all 0.15s ease;
+    }
+
+    .tab-button:hover:not(.active) {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    @media (prefers-color-scheme: light) {
+      .tab-button:hover:not(.active) {
+        background: rgba(0, 0, 0, 0.05);
+      }
     }
 
     .tab-button.active {
-      background: var(--primary);
-      color: var(--on-primary);
-      box-shadow: 0 10px 20px rgba(79, 70, 239, 0.26);
+      color: var(--text);
+      background: var(--surface);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border);
     }
 
     .tab-button:focus-visible {
       outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
-
-    .tab-button:active:not(.active) {
-      transform: scale(0.98);
+      outline-offset: -1px;
     }
 
     .panel {
       display: none;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
     .panel.active {
@@ -217,45 +175,44 @@
     }
 
     .field-label {
-      font-size: 0.76rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--on-surface-variant);
+      letter-spacing: 0.05em;
     }
 
     select,
     input[type="text"],
     input[type="password"] {
       appearance: none;
-      border: 1px solid var(--outline);
-      border-radius: 16px;
-      padding: 12px 14px;
-      font-size: 0.95rem;
-      background: var(--surface-elevated);
-      color: var(--on-surface);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a3a3a3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 32px;
+    }
+
+    select:hover,
+    input:hover {
+      border-color: var(--border-hover);
     }
 
     select:focus-visible,
     input:focus-visible {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(79, 70, 239, 0.18);
-      background: #ffffff;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      select,
-      input[type="text"],
-      input[type="password"] {
-        background: rgba(21, 32, 55, 0.82);
-        border-color: rgba(148, 163, 184, 0.3);
-      }
-
-      select:focus-visible,
-      input:focus-visible {
-        background: rgba(27, 41, 68, 0.92);
-      }
+      box-shadow: 0 0 0 1px var(--primary);
     }
 
     .button-row {
@@ -264,94 +221,126 @@
     }
 
     .md-button {
-      flex: 1 1 auto;\n      width: 100%;\n      min-height: 0;
-      border: none;
-      border-radius: 999px;
-      padding: 12px 16px;
-      font-size: 0.92rem;
-      font-weight: 600;
+      flex: 1;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      font-family: inherit;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
     }
 
     .md-button.filled {
-      background: var(--primary);
-      color: var(--on-primary);
-      box-shadow: 0 10px 22px rgba(79, 70, 239, 0.26);
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .md-button.filled:hover:not([disabled]) {
+      opacity: 0.9;
+    }
+
+    .md-button.filled:active:not([disabled]) {
+      opacity: 0.8;
     }
 
     .md-button.tonal {
-      background: rgba(79, 70, 239, 0.12);
-      color: var(--primary);
+      background: var(--surface-hover);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .md-button.tonal:hover:not([disabled]) {
+      border-color: var(--border-hover);
     }
 
     .md-button.outlined {
       background: transparent;
-      color: var(--on-surface-variant);
-      border: 1px solid var(--outline);
+      color: var(--text);
+      border-color: var(--border);
     }
 
-    .md-button:hover:not([disabled]) {
-      transform: translateY(-1px);
-    }
-
-    .md-button:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
+    .md-button.outlined:hover:not([disabled]) {
+      background: var(--surface-hover);
     }
 
     .md-button[disabled] {
+      opacity: 0.5;
       cursor: not-allowed;
-      opacity: 0.65;
-      transform: none;
-      box-shadow: none;
     }
 
     .usage-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.92rem;
-      color: var(--on-surface-variant);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      padding: 12px;
+      background: var(--surface-hover);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .usage-row strong {
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
     }
 
     #status {
-      font-size: 0.84rem;
-      border-radius: 14px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 6px;
       padding: 10px 12px;
       display: none;
-      transition: opacity 0.2s ease;
     }
 
     #status.show {
       display: block;
-      opacity: 1;
     }
 
     #status.success {
       background: var(--success-container);
       color: var(--success);
-      border: 1px solid rgba(34, 197, 94, 0.26);
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     #status.info {
-      background: rgba(79, 70, 239, 0.12);
-      color: var(--primary);
-      border: 1px solid rgba(79, 70, 239, 0.28);
+      background: var(--surface-hover);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
 
-.panel .helper {
-      font-size: 0.78rem;
-      color: var(--on-surface-variant);
+    #status.error {
+      background: var(--danger-container);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .panel .helper {
+      font-size: 0.7rem;
+      color: var(--text-dim);
     }
   </style>
 </head>
+
 <body>
   <main class="card">
     <header class="header">
       <div class="header-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-          <path fill="currentColor" d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2L12 2z" />
+        <svg viewBox="0 0 24 24" role="presentation" focusable="false" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 2C12 2 12.5 9 16 11.5C18.5 13 22 13 22 13C22 13 18.5 13 16 14.5C12.5 17 12 24 12 24C12 24 11.5 17 8 14.5C5.5 13 2 13 2 13C2 13 5.5 13 8 11.5C11.5 9 12 2 12 2Z"
+            fill="#22c55e" />
+          <path
+            d="M19 4C19 4 19.3 7 21 8.3C22.3 9 24 9 24 9C24 9 22.3 9 21 9.7C19.3 11 19 14 19 14C19 14 18.7 11 17 9.7C15.7 9 14 9 14 9C14 9 15.7 9 17 8.3C18.7 7 19 4 19 4Z"
+            fill="#22c55e" opacity="0.8" />
         </svg>
       </div>
       <div class="header-title">
@@ -361,9 +350,12 @@
     </header>
 
     <nav class="tab-bar" role="tablist" aria-label="Content to view" data-i18n-aria-label="aria_tablist">
-      <button class="tab-button active" role="tab" id="tab-translate" aria-controls="translate-panel" data-target="translate-panel" data-i18n="tab_translate">Translate</button>
-      <button class="tab-button" role="tab" id="tab-settings" aria-controls="settings-panel" data-target="settings-panel" data-i18n="tab_settings">Settings</button>
-      <button class="tab-button" role="tab" id="tab-usage" aria-controls="usage-panel" data-target="usage-panel" data-i18n="tab_usage">Usage</button>
+      <button class="tab-button active" role="tab" id="tab-translate" aria-controls="translate-panel"
+        data-target="translate-panel" data-i18n="tab_translate">Translate</button>
+      <button class="tab-button" role="tab" id="tab-settings" aria-controls="settings-panel"
+        data-target="settings-panel" data-i18n="tab_settings">Settings</button>
+      <button class="tab-button" role="tab" id="tab-usage" aria-controls="usage-panel" data-target="usage-panel"
+        data-i18n="tab_usage">Usage</button>
     </nav>
 
     <section id="translate-panel" class="panel active" role="tabpanel" aria-labelledby="tab-translate">
@@ -378,22 +370,27 @@
           <option value="fr" data-i18n="language_french">French</option>
         </select>
       </div>
-      <button class="md-button filled" type="button" id="translateBtn" data-i18n="button_translate" data-i18n-busy="button_translating">Translate current page</button>
+      <button class="md-button filled" type="button" id="translateBtn" data-i18n="button_translate"
+        data-i18n-busy="button_translating">Translate current page</button>
     </section>
 
     <section id="settings-panel" class="panel" role="tabpanel" aria-labelledby="tab-settings" hidden>
       <div class="field">
         <label class="field-label" for="apiKey" data-i18n="label_api_key">Gemini API Key</label>
-        <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="AIxxxx..." data-i18n-placeholder="placeholder_api_key" />
+        <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="AIxxxx..."
+          data-i18n-placeholder="placeholder_api_key" />
       </div>
       <div class="field">
         <label class="field-label" for="modelName" data-i18n="label_model">Gemini model</label>
-        <input id="modelName" type="text" autocomplete="off" spellcheck="false" placeholder="Default: gemini-2.5-flash-lite" data-i18n-placeholder="placeholder_model" />
+        <input id="modelName" type="text" autocomplete="off" spellcheck="false"
+          placeholder="Default: gemini-2.5-flash-lite" data-i18n-placeholder="placeholder_model" />
         <span class="helper" data-i18n="helper_model_optional">Leave blank to use the default Gemini model.</span>
       </div>
       <div class="button-row">
-        <button class="md-button filled" type="button" id="saveSettings" data-i18n="button_save" data-i18n-busy="button_saving">Save</button>
-        <button class="md-button outlined" type="button" id="openShortcuts" data-i18n="button_shortcuts" data-i18n-title="tooltip_shortcuts">Shortcuts</button>
+        <button class="md-button filled" type="button" id="saveSettings" data-i18n="button_save"
+          data-i18n-busy="button_saving">Save</button>
+        <button class="md-button outlined" type="button" id="openShortcuts" data-i18n="button_shortcuts"
+          data-i18n-title="tooltip_shortcuts">Shortcuts</button>
       </div>
     </section>
 
@@ -402,7 +399,8 @@
         <span data-i18n="label_total_tokens">Total tokens used</span>
         <strong id="tokenCount">0</strong>
       </div>
-      <button class="md-button tonal" type="button" id="resetTokensBtn" data-i18n="button_reset_usage" data-i18n-busy="button_resetting">Reset usage</button>
+      <button class="md-button tonal" type="button" id="resetTokensBtn" data-i18n="button_reset_usage"
+        data-i18n-busy="button_resetting">Reset usage</button>
     </section>
 
     <div id="status" class="status" role="status" aria-live="polite"></div>
@@ -411,15 +409,5 @@
   <script src="popup.js" defer></script>
   <script src="tabs.js" defer></script>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
-

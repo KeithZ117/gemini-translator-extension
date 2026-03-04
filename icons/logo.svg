@@ -1,0 +1,9 @@
+<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="24" fill="rgba(34, 197, 94, 0.1)"/>
+  <rect width="128" height="128" rx="24" fill="transparent" stroke="rgba(34, 197, 94, 0.2)" stroke-width="4"/>
+  
+  <g transform="translate(24, 24) scale(3.3)">
+    <path d="M12 2C12 2 12.5 9 16 11.5C18.5 13 22 13 22 13C22 13 18.5 13 16 14.5C12.5 17 12 24 12 24C12 24 11.5 17 8 14.5C5.5 13 2 13 2 13C2 13 5.5 13 8 11.5C11.5 9 12 2 12 2Z" fill="#22c55e"/>
+    <path d="M19 4C19 4 19.3 7 21 8.3C22.3 9 24 9 24 9C24 9 22.3 9 21 9.7C19.3 11 19 14 19 14C19 14 18.7 11 17 9.7C15.7 9 14 9 14 9C14 9 15.7 9 17 8.3C18.7 7 19 4 19 4Z" fill="#22c55e" opacity="0.8"/>
+  </g>
+</svg>
